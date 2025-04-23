@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
-import { Separator } from "@/components/ui/separator";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Card, CardContent } from "../components/ui/card";
+import { Slider } from "../components/ui/slider";
+import { Separator } from "../components/ui/separator";ator";
 
 // React component code is already correct from canvas context.
 export default function MitosisAirdropEstimator() {
