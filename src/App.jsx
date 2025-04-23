@@ -3,9 +3,8 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent } from "../components/ui/card";
 import { Slider } from "../components/ui/slider";
-import { Separator } from "../components/ui/separator";ator";
+import { Separator } from "../components/ui/separator";
 
-// React component code is already correct from canvas context.
 export default function MitosisAirdropEstimator() {
   const [points, setPoints] = useState(0);
   const [fdv, setFdv] = useState(150);
@@ -17,7 +16,7 @@ export default function MitosisAirdropEstimator() {
 
   const estimateExpeditionAllocation = (fdvValue, percent) => {
     const totalUSD = (fdvValue * 1_000_000) * percent;
-    const expeditionShare = 0.60; // Assume 60% goes to Expedition
+    const expeditionShare = 0.60;
     const expeditionUSD = totalUSD * expeditionShare;
     return (points / totalPoints) * expeditionUSD;
   };
@@ -98,8 +97,12 @@ export default function MitosisAirdropEstimator() {
       <Card>
         <CardContent className="p-4 space-y-3">
           <div className="text-lg font-semibold">Estimated Allocation:</div>
-          <div className="text-sm">🔹 10% Airdrop scenario: <span className="font-bold">${allocation10.toFixed(2)} USD</span></div>
-          <div className="text-sm">🔸 20% Airdrop scenario: <span className="font-bold">${allocation20.toFixed(2)} USD</span></div>
+          <div className="text-sm">
+            🔹 10% Airdrop scenario: <span className="font-bold">${allocation10.toFixed(2)} USD</span>
+          </div>
+          <div className="text-sm">
+            🔸 20% Airdrop scenario: <span className="font-bold">${allocation20.toFixed(2)} USD</span>
+          </div>
         </CardContent>
       </Card>
     </div>
