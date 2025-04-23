@@ -1,9 +1,4 @@
 import { useState } from "react";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Card, CardContent } from "../components/ui/card";
-import { Slider } from "../components/ui/slider";
-import { Separator } from "../components/ui/separator";
 
 export default function MitosisAirdropEstimator() {
   const [points, setPoints] = useState(0);
@@ -40,71 +35,69 @@ export default function MitosisAirdropEstimator() {
       <p className="text-sm text-gray-600">
         Estimate your airdrop allocation in USD, based on your MITO Points, NFT ownership, testnet XP and Discord role.
       </p>
-      <Separator />
+      <hr className="my-4" />
+
       <div className="space-y-4">
-        <Label htmlFor="points">Your MITO Points</Label>
-        <Input
-          id="points"
+        <label className="block text-sm font-medium">Your MITO Points</label>
+        <input
           type="number"
+          className="w-full border rounded px-3 py-2"
           value={points}
           onChange={(e) => setPoints(parseFloat(e.target.value))}
           placeholder="e.g. 8191427"
         />
-        <Label htmlFor="xp">Testnet XP (0–100)</Label>
-        <Slider
-          id="xp"
+
+        <label className="block text-sm font-medium mt-4">Testnet XP (0–100)</label>
+        <input
+          type="range"
           min={0}
           max={100}
-          step={1}
-          value={[xp]}
-          onValueChange={(val) => setXp(val[0])}
+          value={xp}
+          onChange={(e) => setXp(parseInt(e.target.value))}
+          className="w-full"
         />
         <div className="text-sm">XP: {xp}</div>
 
-        <div className="space-y-2">
-          <Label>
-            <input
-              type="checkbox"
-              checked={hasNft}
-              onChange={(e) => setHasNft(e.target.checked)}
-              className="mr-2"
-            />
-            Owns eligible NFT (e.g. Morse or partner collections)
-          </Label>
-          <Label>
-            <input
-              type="checkbox"
-              checked={hasDiscordRole}
-              onChange={(e) => setHasDiscordRole(e.target.checked)}
-              className="mr-2"
-            />
-            Verified Discord community role
-          </Label>
-        </div>
+        <label className="block text-sm font-medium">
+          <input
+            type="checkbox"
+            className="mr-2"
+            checked={hasNft}
+            onChange={(e) => setHasNft(e.target.checked)}
+          />
+          Owns eligible NFT (e.g. Morse or partner collections)
+        </label>
 
-        <Label htmlFor="fdv">Fully Diluted Valuation (FDV) in million USD</Label>
-        <Slider
-          id="fdv"
+        <label className="block text-sm font-medium">
+          <input
+            type="checkbox"
+            className="mr-2"
+            checked={hasDiscordRole}
+            onChange={(e) => setHasDiscordRole(e.target.checked)}
+          />
+          Verified Discord community role
+        </label>
+
+        <label className="block text-sm font-medium mt-4">Fully Diluted Valuation (FDV) in million USD</label>
+        <input
+          type="range"
           min={50}
           max={500}
           step={10}
-          value={[fdv]}
-          onValueChange={(val) => setFdv(val[0])}
+          value={fdv}
+          onChange={(e) => setFdv(parseInt(e.target.value))}
+          className="w-full"
         />
-        <div className="text-sm text-muted-foreground">Selected FDV: {fdv} M$</div>
+        <div className="text-sm">Selected FDV: {fdv} M$</div>
       </div>
-      <Separator />
-      <Card>
-        <CardContent className="p-4 space-y-3">
-          <div className="text-lg font-semibold">Estimated Allocation:</div>
-          <div className="text-sm">
-            🔹 10% Airdrop scenario: <span className="font-bold">${allocation10.toFixed(2)} USD</span>
-          </div>
-          <div className="text-sm">
-            🔸 20% Airdrop scenario: <span className="font-bold">${allocation20.toFixed(2)} USD</span>
-          </div>
-        </CardContent>
-      </Card>
+
+      <hr className="my-4" />
+
+      <div className="bg-gray-100 p-4 rounded">
+        <div className="text-lg font-semibold mb-2">Estimated Allocation:</div>
+        <div className="text-sm">🔹 10% Airdrop scenario: <strong>${allocation10.toFixed(2)} USD</strong></div>
+        <div className="text-sm">🔸 20% Airdrop scenario: <strong>${allocation20.toFixed(2)} USD</strong></div>
+      </div>
     </div>
   );
 }
