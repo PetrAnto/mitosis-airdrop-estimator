@@ -36,7 +36,7 @@ export default function MitosisAirdropEstimator() {
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6 sm:p-4 space-y-6 max-w-3xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <img src="https://mitosis.org/logo-dark.svg" alt="Mitosis Logo" className="h-10 sm:h-8" />
+        <img src="https://mitosis.org/favicon.svg" alt="Mitosis Logo" className="h-10 sm:h-8" />
         <h1 className="text-2xl font-bold sm:text-xl text-center sm:text-left">💧 Mitosis Airdrop Estimator</h1>
       </div>
       <p className="text-sm text-gray-300 text-center sm:text-left">
