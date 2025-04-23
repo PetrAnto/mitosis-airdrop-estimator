@@ -6,5 +6,6 @@ import MitosisAirdropEstimator from './App';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <MitosisAirdropEstimator />
+     <Analytics />
   </React.StrictMode>
 );
