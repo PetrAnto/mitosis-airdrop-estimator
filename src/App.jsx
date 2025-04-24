@@ -1,76 +1,70 @@
 import { useState } from "react";
 
-export default function MitosisAirdropEstimator() {
-  const [points, setPoints] = useState(0);
-  const [fdv, setFdv] = useState(150);
-  const [xp, setXp] = useState(0);
-  const [morsePct, setMorsePct] = useState(0);
-  const [partnerPct, setPartnerPct] = useState(0);
-  const [discordPct, setDiscordPct] = useState(0);
-  const [kaitoPct, setKaitoPct] = useState(0);
-  const [hasMorse, setHasMorse] = useState(false);
-  const [hasPartner, setHasPartner] = useState(false);
-  const [hasDiscord, setHasDiscord] = useState(false);
-  const [hasKaito, setHasKaito] = useState(false);
+export default function MitosisAirdropEstimator() { const [points, setPoints] = useState(0); const [fdv, setFdv] = useState(150); const [xp, setXp] = useState(0); const [morsePct, setMorsePct] = useState(2); const [partnerPct, setPartnerPct] = useState(3); const [discordMiPct, setDiscordMiPct] = useState(1); const [discordInternPct, setDiscordInternPct] = useState(1); const [kaitoPct, setKaitoPct] = useState(1); const [hasMorse, setHasMorse] = useState(false); const [hasPartner, setHasPartner] = useState(false); const [hasMiRole, setHasMiRole] = useState(false); const [hasInternRole, setHasInternRole] = useState(false); const [hasKaito, setHasKaito] = useState(false); const [dailyMito, setDailyMito] = useState(0); const [testnetDays, setTestnetDays] = useState(45);
 
-  const totalPoints = 194_000_000_000;
+const totalPoints = 194_000_000_000; const morseSupply = 555; const partnerTotalSupply = 8000; // example total of all partner NFTs const miRoleCount = 100; const internRoleCount = 200;
 
-  const estimateExpedition = (fdvVal, percent) => {
-    const expeditionUsd = (fdvVal * 1_000_000) * percent;
-    return (points / totalPoints) * expeditionUsd;
-  };
+const estimateExpedition = (fdvVal, percent) => { const expeditionUsd = (fdvVal * 1_000_000) * percent * 0.6; return (points / totalPoints) * expeditionUsd; };
 
-  const estimateAdditional = (fdvVal) => {
-    const usd = fdvVal * 1_000_000;
-    let total = 0;
-    if (hasMorse) total += (usd * morsePct / 100);
-    if (hasPartner) total += (usd * partnerPct / 100);
-    if (hasDiscord) total += (usd * discordPct / 100);
-    if (hasKaito) total += (usd * kaitoPct / 100);
-    return total;
-  };
+const estimateAdditional = (fdvVal, percent) => { const usd = fdvVal * 1_000_000 * percent; let total = 0; if (hasMorse) total += usd * (morsePct / 100) / morseSupply; if (hasPartner) total += usd * (partnerPct / 100) / partnerTotalSupply; if (hasMiRole) total += usd * (discordMiPct / 100) / miRoleCount; if (hasInternRole) total += usd * (discordInternPct / 100) / internRoleCount; if (hasKaito) total += usd * (kaitoPct / 100); return total; };
 
-  const allocation10 = estimateExpedition(fdv, 0.10) + estimateAdditional(fdv * 0.10);
-  const allocation20 = estimateExpedition(fdv, 0.20) + estimateAdditional(fdv * 0.20);
+const estimateGameOfMito = (fdvVal, percent) => { const totalUsd = fdvVal * 1_000_000 * percent; const totalMito = dailyMito * testnetDays; const rewardShare = totalMito / 1_000_000; return rewardShare * totalUsd; };
 
-  return (
-    <div style={{ background: '#111', color: '#fff', padding: '2rem', minHeight: '100vh' }}>
-      <h1>Mitosis Airdrop Estimator</h1>
-      <p>Set your inputs below to estimate your airdrop:</p>
+const allocation10 = estimateExpedition(fdv, 0.10) + estimateAdditional(fdv, 0.10); const allocation20 = estimateExpedition(fdv, 0.20) + estimateAdditional(fdv, 0.20); const testnetAllocation10 = estimateGameOfMito(fdv, 0.10); const testnetAllocation20 = estimateGameOfMito(fdv, 0.20);
 
-      <label>MITO Points</label>
-      <input type="number" value={points} onChange={e => setPoints(Number(e.target.value))} />
+return ( <div className="bg-gray-900 text-white min-h-screen p-6 space-y-6 max-w-3xl mx-auto"> <h1 className="text-2xl font-bold">Mitosis Airdrop Estimator</h1>
 
-      <label>Testnet XP (0–100)</label>
-      <input type="range" min="0" max="100" value={xp} onChange={e => setXp(Number(e.target.value))} />
-      <p>XP: {xp}</p>
+<label>Your MITO Points</label>
+  <input type="number" className="w-full text-black" value={points} onChange={e => setPoints(Number(e.target.value))} />
 
-      <label>FDV ($M)</label>
-      <input type="range" min="50" max="500" step="10" value={fdv} onChange={e => setFdv(Number(e.target.value))} />
-      <p>FDV: {fdv}M</p>
+  <label>XP (0–100)</label>
+  <input type="range" min="0" max="100" value={xp} onChange={e => setXp(Number(e.target.value))} className="w-full" />
+  <div>XP: {xp}</div>
 
-      <hr />
+  <label>FDV ($M)</label>
+  <input type="range" min="50" max="500" step="10" value={fdv} onChange={e => setFdv(Number(e.target.value))} className="w-full" />
+  <div>FDV: {fdv}M</div>
 
-      <h2>Additional Rewards (% of FDV)</h2>
-      <div>
-        <label><input type="checkbox" checked={hasMorse} onChange={e => setHasMorse(e.target.checked)} /> Morse NFT</label>
-        <input type="number" value={morsePct} onChange={e => setMorsePct(Number(e.target.value))} placeholder="%" />
+  <hr className="my-4 border-gray-600" />
 
-        <label><input type="checkbox" checked={hasPartner} onChange={e => setHasPartner(e.target.checked)} /> Partner NFT</label>
-        <input type="number" value={partnerPct} onChange={e => setPartnerPct(Number(e.target.value))} placeholder="%" />
+  <h2 className="text-xl font-semibold">Additional Rewards (% of FDV)</h2>
+  <div className="grid grid-cols-2 gap-4">
+    <label><input type="checkbox" checked={hasMorse} onChange={e => setHasMorse(e.target.checked)} /> Morse NFT (%)
+      <input type="number" className="w-full text-black" value={morsePct} onChange={e => setMorsePct(Number(e.target.value))} />
+    </label>
+    <label><input type="checkbox" checked={hasPartner} onChange={e => setHasPartner(e.target.checked)} /> Partner NFTs (%)
+      <input type="number" className="w-full text-black" value={partnerPct} onChange={e => setPartnerPct(Number(e.target.value))} />
+    </label>
+    <label><input type="checkbox" checked={hasMiRole} onChange={e => setHasMiRole(e.target.checked)} /> Discord Mi-Role (%)
+      <input type="number" className="w-full text-black" value={discordMiPct} onChange={e => setDiscordMiPct(Number(e.target.value))} />
+    </label>
+    <label><input type="checkbox" checked={hasInternRole} onChange={e => setHasInternRole(e.target.checked)} /> Discord Intern-Role (%)
+      <input type="number" className="w-full text-black" value={discordInternPct} onChange={e => setDiscordInternPct(Number(e.target.value))} />
+    </label>
+    <label><input type="checkbox" checked={hasKaito} onChange={e => setHasKaito(e.target.checked)} /> Kaito Leaderboard (%)
+      <input type="number" className="w-full text-black" value={kaitoPct} onChange={e => setKaitoPct(Number(e.target.value))} />
+    </label>
+  </div>
 
-        <label><input type="checkbox" checked={hasDiscord} onChange={e => setHasDiscord(e.target.checked)} /> Discord Role</label>
-        <input type="number" value={discordPct} onChange={e => setDiscordPct(Number(e.target.value))} placeholder="%" />
+  <hr className="my-4 border-gray-600" />
 
-        <label><input type="checkbox" checked={hasKaito} onChange={e => setHasKaito(e.target.checked)} /> Kaito Leaderboard</label>
-        <input type="number" value={kaitoPct} onChange={e => setKaitoPct(Number(e.target.value))} placeholder="%" />
-      </div>
+  <h2 className="text-xl font-semibold">Game of Mito Testnet</h2>
+  <label>Daily MITO earned (based on tier)</label>
+  <input type="number" className="w-full text-black" value={dailyMito} onChange={e => setDailyMito(Number(e.target.value))} />
 
-      <hr />
+  <label>Testnet duration (days)</label>
+  <input type="number" className="w-full text-black" value={testnetDays} onChange={e => setTestnetDays(Number(e.target.value))} />
 
-      <h2>Estimated Airdrop:</h2>
-      <p>10% Scenario: <strong>${allocation10.toFixed(2)}</strong></p>
-      <p>20% Scenario: <strong>${allocation20.toFixed(2)}</strong></p>
-    </div>
-  );
-}
+  <hr className="my-4 border-gray-600" />
+
+  <div className="bg-gray-800 p-4 rounded">
+    <h2 className="text-lg font-bold mb-2">Estimated Allocation:</h2>
+    <div>🔹 10% Airdrop scenario: <strong>${allocation10.toFixed(2)} USD</strong></div>
+    <div>🔸 20% Airdrop scenario: <strong>${allocation20.toFixed(2)} USD</strong></div>
+    <div>🎯 Game of Mito Testnet (10% scenario): <strong>${testnetAllocation10.toFixed(2)} USD</strong></div>
+    <div>🎯 Game of Mito Testnet (20% scenario): <strong>${testnetAllocation20.toFixed(2)} USD</strong></div>
+  </div>
+</div>
+
+); }
+
