@@ -104,6 +104,5 @@ return ( <div className="bg-gray-900 text-white min-h-screen p-6 sm:p-4 space-y-
     <div className="text-sm">🎯 Game of Mito Testnet (Top 27% weight): <strong>${gameOfMito20.toFixed(2)} USD</strong></div>
   </div>
 </div>
-
-); }
-
+  );
+}
