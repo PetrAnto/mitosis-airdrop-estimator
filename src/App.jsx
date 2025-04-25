@@ -4,6 +4,9 @@ export default function MitosisAirdropEstimator() {
   const [points, setPoints] = useState(0);
   const [fdv, setFdv] = useState(150);
 
+  const [expeditionPct, setExpeditionPct] = useState(15);
+  const [testnetPct, setTestnetPct] = useState(10);
+
   const [hasMorse, setHasMorse] = useState(false);
   const [morsePct, setMorsePct] = useState(1);
 
@@ -18,8 +21,6 @@ export default function MitosisAirdropEstimator() {
 
   const [testnetMito, setTestnetMito] = useState(0);
 
-  const expeditionPct = 60;
-  const testnetPct = 10;
   const totalPoints = 194_000_000_000;
 
   const morseSupply = 2924;
@@ -54,7 +55,23 @@ export default function MitosisAirdropEstimator() {
 
       <hr className="my-4 border-gray-600" />
 
-      {/* Expedition Points */}
+      {/* Mitosis Expedition */}
+      <h2 className="text-xl font-semibold">Mitosis Expedition</h2>
+
+      <div className="space-y-4">
+        <label className="block">Expedition Allocation (% of FDV)</label>
+        <input
+          type="range"
+          min="0"
+          max="50"
+          step="1"
+          className="w-full"
+          value={expeditionPct}
+          onChange={(e) => setExpeditionPct(Number(e.target.value))}
+        />
+        <div>Expedition: {expeditionPct}% of FDV</div>
+      </div>
+
       <div className="space-y-4">
         <label className="block">Your MITO Points (Expedition Campaign)</label>
         <input
@@ -63,6 +80,44 @@ export default function MitosisAirdropEstimator() {
           value={points}
           onChange={(e) => setPoints(Number(e.target.value))}
           placeholder="e.g. 8191427"
+        />
+      </div>
+
+      <hr className="my-4 border-gray-600" />
+
+      {/* Game of Mito Testnet */}
+      <h2 className="text-xl font-semibold">Game of Mito Testnet Rewards</h2>
+
+      <div className="space-y-4">
+        <label className="block">Testnet Allocation (% of FDV)</label>
+        <input
+          type="range"
+          min="0"
+          max="20"
+          step="1"
+          className="w-full"
+          value={testnetPct}
+          onChange={(e) => setTestnetPct(Number(e.target.value))}
+        />
+        <div>Testnet: {testnetPct}% of FDV</div>
+      </div>
+
+      <div className="space-y-2">
+        <label>
+          How many Testnet $MITO did you earn?<br />
+          <span className="text-blue-300 text-sm">
+            Use the{" "}
+            <a href="https://murinxda.budibase.app/app/mitosis-tools#/testnet-rank" target="_blank" rel="noopener noreferrer" className="underline">
+              Game of Mito Points Calculator
+            </a>{" "}
+            to find out.
+          </span>
+        </label>
+        <input
+          type="number"
+          className="w-1/2 p-2 text-black rounded"
+          value={testnetMito}
+          onChange={(e) => setTestnetMito(Number(e.target.value))}
         />
       </div>
 
@@ -125,29 +180,6 @@ export default function MitosisAirdropEstimator() {
 
       <hr className="my-4 border-gray-600" />
 
-      {/* Testnet Bonus */}
-      <h2 className="text-xl font-semibold">Game of Mito Testnet Rewards</h2>
-      <div className="space-y-2">
-        <label>
-          How many Testnet $MITO did you earn?<br />
-          <span className="text-blue-300 text-sm">
-            Use the{" "}
-            <a href="https://murinxda.budibase.app/app/mitosis-tools#/testnet-rank" target="_blank" rel="noopener noreferrer" className="underline">
-              Game of Mito Points Calculator
-            </a>{" "}
-            to find out.
-          </span>
-        </label>
-        <input
-          type="number"
-          className="w-1/2 p-2 text-black rounded"
-          value={testnetMito}
-          onChange={(e) => setTestnetMito(Number(e.target.value))}
-        />
-      </div>
-
-      <hr className="my-4 border-gray-600" />
-
       {/* FDV */}
       <div className="space-y-2">
         <label className="block">Fully Diluted Valuation (FDV) (in Million USD)</label>
@@ -165,7 +197,7 @@ export default function MitosisAirdropEstimator() {
 
       <hr className="my-4 border-gray-600" />
 
-      {/* Result Summary */}
+      {/* Summary */}
       <div className="bg-gray-800 p-4 rounded space-y-4">
         <h2 className="text-lg font-bold mb-2">Estimated Allocation Summary</h2>
         <p>Total Base Airdrop: {totalBasePct}% of FDV ({expeditionPct}% Expedition + {testnetPct}% Testnet)</p>
