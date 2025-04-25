@@ -17,34 +17,44 @@ export default function MitosisAirdropEstimator() {
   const [internRolePct, setInternRolePct] = useState(1);
 
   const [testnetMito, setTestnetMito] = useState(0);
-  const expeditionPct = 60;
-  const testnetPct = 10; // Game of Mito is assumed fixed 10% (adjust if needed)
 
+  const expeditionPct = 60;
+  const testnetPct = 10;
   const totalPoints = 194_000_000_000;
 
-  const expeditionAllocation = (points / totalPoints) * (fdv * 1_000_000 * (expeditionPct / 100));
-  const testnetAllocation = (testnetMito / 1_000_000) * (fdv * 1_000_000 * (testnetPct / 100)); // Assume 1M testnet MITO pool
+  const morseSupply = 2924;
+  const partnerSupply = 38888;
+  const miRoleSupply = 100;
+  const internRoleSupply = 200;
 
-  const additionalPct = 
+  const expeditionAllocation = (points / totalPoints) * (fdv * 1_000_000 * (expeditionPct / 100));
+  const testnetAllocation = (testnetMito / 1_000_000) * (fdv * 1_000_000 * (testnetPct / 100));
+
+  const additionalAllocation = (fdv * 1_000_000) * (
+    (hasMorse ? (morsePct / 100) / morseSupply : 0) +
+    (hasPartner ? (partnerPct / 100) / partnerSupply : 0) +
+    (hasMiRole ? (miRolePct / 100) / miRoleSupply : 0) +
+    (hasInternRole ? (internRolePct / 100) / internRoleSupply : 0)
+  );
+
+  const totalBasePct = expeditionPct + testnetPct;
+  const totalAdditionalPct =
     (hasMorse ? morsePct : 0) +
     (hasPartner ? partnerPct : 0) +
     (hasMiRole ? miRolePct : 0) +
     (hasInternRole ? internRolePct : 0);
-
-  const additionalAllocation = (fdv * 1_000_000) * (additionalPct / 100);
-
-  const totalBasePct = expeditionPct + testnetPct;
-  const totalPct = totalBasePct + additionalPct;
+  const totalPct = totalBasePct + totalAdditionalPct;
 
   return (
     <div className="min-h-screen bg-black text-white max-w-3xl mx-auto p-6 space-y-6">
       <h1 className="text-2xl font-bold text-center">💧 PetrAnto Mitosis Airdrop Calculator</h1>
       <p className="text-sm text-gray-400 text-center">
-        Estimate your airdrop allocation based on MITO Points, NFTs, Discord Roles and Testnet XP.
+        Estimate your airdrop allocation based on MITO Points, NFTs, Discord Roles and Testnet rewards.
       </p>
 
       <hr className="my-4 border-gray-600" />
 
+      {/* Expedition Points */}
       <div className="space-y-4">
         <label className="block">Your MITO Points (Expedition Campaign)</label>
         <input
@@ -58,12 +68,13 @@ export default function MitosisAirdropEstimator() {
 
       <hr className="my-4 border-gray-600" />
 
+      {/* Additional Rewards */}
       <h2 className="text-xl font-semibold">Additional Rewards (% of FDV)</h2>
 
       <div className="space-y-2">
         <label>
           <input type="checkbox" checked={hasMorse} onChange={e => setHasMorse(e.target.checked)} />
-          {" "}Own Morse NFT (% of FDV)
+          {" "}Own Morse NFT (Supply: 2,924 NFTs)
         </label>
         <input
           type="number"
@@ -76,7 +87,7 @@ export default function MitosisAirdropEstimator() {
       <div className="space-y-2">
         <label>
           <input type="checkbox" checked={hasPartner} onChange={e => setHasPartner(e.target.checked)} />
-          {" "}Own Partner Collection NFT (% of FDV)
+          {" "}Own Partner Collection NFT (Supply: 38,888 NFTs)
         </label>
         <input
           type="number"
@@ -89,7 +100,7 @@ export default function MitosisAirdropEstimator() {
       <div className="space-y-2">
         <label>
           <input type="checkbox" checked={hasMiRole} onChange={e => setHasMiRole(e.target.checked)} />
-          {" "}Discord Mi-Role (% of FDV)
+          {" "}Discord Mi-Role (Supply: 100 holders)
         </label>
         <input
           type="number"
@@ -102,7 +113,7 @@ export default function MitosisAirdropEstimator() {
       <div className="space-y-2">
         <label>
           <input type="checkbox" checked={hasInternRole} onChange={e => setHasInternRole(e.target.checked)} />
-          {" "}Discord Intern-Role (% of FDV)
+          {" "}Discord Intern-Role (Supply: 200 holders)
         </label>
         <input
           type="number"
@@ -114,12 +125,13 @@ export default function MitosisAirdropEstimator() {
 
       <hr className="my-4 border-gray-600" />
 
-      <h2 className="text-xl font-semibold">Game of Mito Testnet</h2>
+      {/* Testnet Bonus */}
+      <h2 className="text-xl font-semibold">Game of Mito Testnet Rewards</h2>
       <div className="space-y-2">
         <label>
           How many Testnet $MITO did you earn?<br />
           <span className="text-blue-300 text-sm">
-            Use the {" "}
+            Use the{" "}
             <a href="https://murinxda.budibase.app/app/mitosis-tools#/testnet-rank" target="_blank" rel="noopener noreferrer" className="underline">
               Game of Mito Points Calculator
             </a>{" "}
@@ -136,6 +148,7 @@ export default function MitosisAirdropEstimator() {
 
       <hr className="my-4 border-gray-600" />
 
+      {/* FDV */}
       <div className="space-y-2">
         <label className="block">Fully Diluted Valuation (FDV) (in Million USD)</label>
         <input
@@ -152,10 +165,11 @@ export default function MitosisAirdropEstimator() {
 
       <hr className="my-4 border-gray-600" />
 
+      {/* Result Summary */}
       <div className="bg-gray-800 p-4 rounded space-y-4">
         <h2 className="text-lg font-bold mb-2">Estimated Allocation Summary</h2>
-        <p>Total Base Airdrop: {totalBasePct}% of FDV ({expeditionPct}% Expedition, {testnetPct}% Testnet)</p>
-        <p>Additional Rewards Total: {additionalPct}% of FDV</p>
+        <p>Total Base Airdrop: {totalBasePct}% of FDV ({expeditionPct}% Expedition + {testnetPct}% Testnet)</p>
+        <p>Additional Rewards Total: {totalAdditionalPct}% of FDV</p>
         <p><strong>Total Simulated FDV Allocation: {totalPct}%</strong></p>
 
         <div className="pt-2">
