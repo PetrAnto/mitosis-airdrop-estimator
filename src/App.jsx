@@ -14,10 +14,10 @@ export default function MitosisAirdropEstimator() {
   const [partnerPct, setPartnerPct] = useState(0.5);
 
   const [hasMiRole, setHasMiRole] = useState(false);
-  const [miRolePct, setMiRolePct] = useState(1);
+  const [miRolePct, setMiRolePct] = useState(0.1);
 
   const [hasInternRole, setHasInternRole] = useState(false);
-  const [internRolePct, setInternRolePct] = useState(1);
+  const [internRolePct, setInternRolePct] = useState(0.1);
 
   const [testnetMito, setTestnetMito] = useState(0);
 
@@ -39,12 +39,14 @@ export default function MitosisAirdropEstimator() {
   );
 
   const totalBasePct = expeditionPct + testnetPct;
-  const totalAdditionalPct =
+  const totalAdditionalPct = (
     (hasMorse ? morsePct : 0) +
     (hasPartner ? partnerPct : 0) +
     (hasMiRole ? miRolePct : 0) +
-    (hasInternRole ? internRolePct : 0);
-  const totalPct = totalBasePct + totalAdditionalPct;
+    (hasInternRole ? internRolePct : 0)
+  ).toFixed(2);
+
+  const totalPct = (parseFloat(totalBasePct) + parseFloat(totalAdditionalPct)).toFixed(2);
 
   return (
     <div className="min-h-screen bg-black text-white max-w-3xl mx-auto p-6 space-y-6">
@@ -214,6 +216,11 @@ export default function MitosisAirdropEstimator() {
         <div className="pt-4">
           <h3 className="font-semibold text-md mb-1">Additional Rewards</h3>
           <p>Total Additional Allocation: <strong>${additionalAllocation.toFixed(2)} USD</strong></p>
+        </div>
+
+        <div className="pt-4">
+          <h3 className="font-semibold text-md mb-1">Total Estimated Airdrop</h3>
+          <p><strong>${(expeditionAllocation + testnetAllocation + additionalAllocation).toFixed(2)} USD</strong></p>
         </div>
       </div>
 
