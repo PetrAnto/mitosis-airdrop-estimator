@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { Pie } from "react-chartjs-2";
+import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
+
+Chart.register(ArcElement, Tooltip, Legend);
 
 export default function MitosisAirdropEstimator() {
   const [points, setPoints] = useState(0);
@@ -45,187 +49,139 @@ export default function MitosisAirdropEstimator() {
     (hasMiRole ? miRolePct : 0) +
     (hasInternRole ? internRolePct : 0)
   ).toFixed(2);
-
   const totalPct = (parseFloat(totalBasePct) + parseFloat(totalAdditionalPct)).toFixed(2);
 
+  const data = {
+    labels: ['Expedition', 'Testnet', 'Additional Rewards'],
+    datasets: [
+      {
+        data: [
+          expeditionAllocation,
+          testnetAllocation,
+          additionalAllocation
+        ],
+        backgroundColor: [
+          '#7C3AED',
+          '#6366F1',
+          '#A5B4FC'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white max-w-3xl mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-[#E9EAFF] text-gray-900 flex flex-col items-center px-6 py-8 space-y-6">
+      <img src="/petrantocalculator.png" alt="PetrAnto Logo" className="w-60 mb-4" />
       <h1 className="text-2xl font-bold text-center">💧 PetrAnto Mitosis Airdrop Calculator</h1>
-      <p className="text-sm text-gray-400 text-center">
+      <p className="text-sm text-gray-700 text-center">
         Estimate your airdrop allocation based on MITO Points, NFTs, Discord Roles and Testnet rewards.
       </p>
 
-      <hr className="my-4 border-gray-600" />
-
-      {/* Mitosis Expedition */}
-      <h2 className="text-xl font-semibold">Mitosis Expedition</h2>
-
-      <div className="space-y-4">
-        <label className="block">Expedition Allocation (% of FDV)</label>
-        <input
-          type="range"
-          min="0"
-          max="50"
-          step="1"
-          className="w-full"
-          value={expeditionPct}
-          onChange={(e) => setExpeditionPct(Number(e.target.value))}
-        />
-        <div>Expedition: {expeditionPct}% of FDV</div>
-      </div>
-
-      <div className="space-y-4">
-        <label className="block">Your MITO Points (Expedition Campaign)</label>
-        <input
-          type="number"
-          className="w-1/2 p-2 text-black rounded"
-          value={points}
-          onChange={(e) => setPoints(Number(e.target.value))}
-          placeholder="e.g. 8191427"
-        />
-      </div>
-
-      <hr className="my-4 border-gray-600" />
-
-      {/* Game of Mito Testnet */}
-      <h2 className="text-xl font-semibold">Game of Mito Testnet Rewards</h2>
-
-      <div className="space-y-4">
-        <label className="block">Testnet Allocation (% of FDV)</label>
-        <input
-          type="range"
-          min="0"
-          max="20"
-          step="1"
-          className="w-full"
-          value={testnetPct}
-          onChange={(e) => setTestnetPct(Number(e.target.value))}
-        />
-        <div>Testnet: {testnetPct}% of FDV</div>
-      </div>
-
-      <div className="space-y-2">
-        <label>
-          How many Testnet $MITO did you earn?<br />
-          <span className="text-blue-300 text-sm">
-            Use the{" "}
-            <a href="https://murinxda.budibase.app/app/mitosis-tools#/testnet-rank" target="_blank" rel="noopener noreferrer" className="underline">
-              Game of Mito Points Calculator
-            </a>{" "}
-            to find out.
-          </span>
-        </label>
-        <input
-          type="number"
-          className="w-1/2 p-2 text-black rounded"
-          value={testnetMito}
-          onChange={(e) => setTestnetMito(Number(e.target.value))}
-        />
-      </div>
-
-      <hr className="my-4 border-gray-600" />
-
-      {/* Additional Rewards */}
-      <h2 className="text-xl font-semibold">Additional Rewards (% of FDV)</h2>
-
-      <div className="space-y-2">
-        <label>
-          <input type="checkbox" checked={hasMorse} onChange={e => setHasMorse(e.target.checked)} />
-          {" "}Own Morse NFT (Supply: 2,924 NFTs)
-        </label>
-        <input
-          type="number"
-          className="w-1/2 p-2 text-black rounded"
-          value={morsePct}
-          onChange={(e) => setMorsePct(Number(e.target.value))}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <label>
-          <input type="checkbox" checked={hasPartner} onChange={e => setHasPartner(e.target.checked)} />
-          {" "}Own Partner Collection NFT (Supply: 38,888 NFTs)
-        </label>
-        <input
-          type="number"
-          className="w-1/2 p-2 text-black rounded"
-          value={partnerPct}
-          onChange={(e) => setPartnerPct(Number(e.target.value))}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <label>
-          <input type="checkbox" checked={hasMiRole} onChange={e => setHasMiRole(e.target.checked)} />
-          {" "}Discord Mi-Role (Supply: 100 holders)
-        </label>
-        <input
-          type="number"
-          className="w-1/2 p-2 text-black rounded"
-          value={miRolePct}
-          onChange={(e) => setMiRolePct(Number(e.target.value))}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <label>
-          <input type="checkbox" checked={hasInternRole} onChange={e => setHasInternRole(e.target.checked)} />
-          {" "}Discord Intern-Role (Supply: 200 holders)
-        </label>
-        <input
-          type="number"
-          className="w-1/2 p-2 text-black rounded"
-          value={internRolePct}
-          onChange={(e) => setInternRolePct(Number(e.target.value))}
-        />
-      </div>
-
-      <hr className="my-4 border-gray-600" />
-
-      {/* FDV */}
-      <div className="space-y-2">
-        <label className="block">Fully Diluted Valuation (FDV) (in Million USD)</label>
-        <input
-          type="range"
-          min="50"
-          max="500"
-          step="10"
-          className="w-full"
-          value={fdv}
-          onChange={(e) => setFdv(Number(e.target.value))}
-        />
-        <div>Selected FDV: {fdv}M$</div>
-      </div>
-
-      <hr className="my-4 border-gray-600" />
-
-      {/* Summary */}
-      <div className="bg-gray-800 p-4 rounded space-y-4">
-        <h2 className="text-lg font-bold mb-2">Estimated Allocation Summary</h2>
-        <p>Total Base Airdrop: {totalBasePct}% of FDV ({expeditionPct}% Expedition + {testnetPct}% Testnet)</p>
-        <p>Additional Rewards Total: {totalAdditionalPct}% of FDV</p>
-        <p><strong>Total Simulated FDV Allocation: {totalPct}%</strong></p>
-
-        <div className="pt-2">
-          <h3 className="font-semibold text-md mb-1">Base Airdrop Breakdown</h3>
-          <p>Expedition Allocation: <strong>${expeditionAllocation.toFixed(2)} USD</strong></p>
-          <p>Testnet Allocation: <strong>${testnetAllocation.toFixed(2)} USD</strong></p>
-          <p>Total Base Allocation: <strong>${(expeditionAllocation + testnetAllocation).toFixed(2)} USD</strong></p>
+      <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-2xl space-y-6">
+        
+        {/* Expedition Section */}
+        <h2 className="text-xl font-semibold">Expedition Allocation</h2>
+        <div className="space-y-2">
+          <label>Your MITO Points from Expedition</label>
+          <input
+            type="number"
+            className="w-full rounded px-3 py-2 border border-gray-300"
+            value={points}
+            onChange={e => setPoints(Number(e.target.value))}
+          />
+          <label>Expedition % of FDV</label>
+          <input
+            type="range"
+            min="0"
+            max="30"
+            value={expeditionPct}
+            onChange={e => setExpeditionPct(Number(e.target.value))}
+            className="w-full"
+          />
+          <div>{expeditionPct}%</div>
         </div>
 
-        <div className="pt-4">
-          <h3 className="font-semibold text-md mb-1">Additional Rewards</h3>
-          <p>Total Additional Allocation: <strong>${additionalAllocation.toFixed(2)} USD</strong></p>
+        {/* Testnet Section */}
+        <h2 className="text-xl font-semibold">Game of Mito Testnet</h2>
+        <div className="space-y-2">
+          <label>Your Testnet $MITO Earned</label>
+          <input
+            type="number"
+            className="w-full rounded px-3 py-2 border border-gray-300"
+            value={testnetMito}
+            onChange={e => setTestnetMito(Number(e.target.value))}
+          />
+          <label>Testnet % of FDV</label>
+          <input
+            type="range"
+            min="0"
+            max="20"
+            value={testnetPct}
+            onChange={e => setTestnetPct(Number(e.target.value))}
+            className="w-full"
+          />
+          <div>{testnetPct}%</div>
         </div>
 
-        <div className="pt-4">
-          <h3 className="font-semibold text-md mb-1">Total Estimated Airdrop</h3>
-          <p><strong>${(expeditionAllocation + testnetAllocation + additionalAllocation).toFixed(2)} USD</strong></p>
+        {/* Additional Rewards Section */}
+        <h2 className="text-xl font-semibold">Additional Rewards</h2>
+        <div className="space-y-4">
+          {/* Morse NFT */}
+          <div>
+            <label><input type="checkbox" checked={hasMorse} onChange={e => setHasMorse(e.target.checked)} /> Morse NFT (1% of FDV / 2924 supply)</label>
+          </div>
+          {/* Partner NFTs */}
+          <div>
+            <label><input type="checkbox" checked={hasPartner} onChange={e => setHasPartner(e.target.checked)} /> Partner NFTs (0.5% of FDV / 38888 supply)</label>
+          </div>
+          {/* Discord MiRole */}
+          <div>
+            <label><input type="checkbox" checked={hasMiRole} onChange={e => setHasMiRole(e.target.checked)} /> Discord Mi-Role (0.1% of FDV / 100 supply)</label>
+          </div>
+          {/* Discord InternRole */}
+          <div>
+            <label><input type="checkbox" checked={hasInternRole} onChange={e => setHasInternRole(e.target.checked)} /> Discord Intern-Role (0.1% of FDV / 200 supply)</label>
+          </div>
+        </div>
+
+        {/* FDV Settings */}
+        <h2 className="text-xl font-semibold">Market Settings</h2>
+        <div className="space-y-2">
+          <label>Fully Diluted Valuation (FDV) in million USD</label>
+          <input
+            type="range"
+            min="50"
+            max="500"
+            step="10"
+            value={fdv}
+            onChange={e => setFdv(Number(e.target.value))}
+            className="w-full"
+          />
+          <div>{fdv}M USD</div>
+        </div>
+
+        {/* Summary */}
+        <h2 className="text-xl font-semibold">Estimated Airdrop Summary</h2>
+        <div className="space-y-2">
+          <p>Total Base Airdrop: {totalBasePct}% of FDV ({expeditionPct}% Expedition + {testnetPct}% Testnet)</p>
+          <p>Additional Rewards: {totalAdditionalPct}% of FDV</p>
+          <p><strong>Total Simulated Allocation: {totalPct}% of FDV</strong></p>
+
+          <p>Expedition: <strong>${expeditionAllocation.toFixed(2)} USD</strong></p>
+          <p>Testnet: <strong>${testnetAllocation.toFixed(2)} USD</strong></p>
+          <p>Additional: <strong>${additionalAllocation.toFixed(2)} USD</strong></p>
+
+          <p className="mt-2 font-bold">TOTAL Airdrop: <strong>${(expeditionAllocation + testnetAllocation + additionalAllocation).toFixed(2)} USD</strong></p>
+        </div>
+
+        <div className="pt-6">
+          <Pie data={data} />
         </div>
       </div>
 
-      <footer className="pt-4 text-center text-xs text-gray-500">
-        Built by <a href="https://x.com/PetrAnto12" className="text-blue-400 hover:underline" target="_blank">@PetrAnto12</a>
+      <footer className="text-xs text-gray-600 pt-6">
+        Built by <a href="https://x.com/PetrAnto12" target="_blank" className="text-blue-600 underline">@PetrAnto12</a>
       </footer>
     </div>
   );
